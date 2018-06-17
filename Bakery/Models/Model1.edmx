@@ -1,0 +1,499 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BakeryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BakeryLog">
+          <Key>
+            <PropertyRef Name="BakeryLogKey" />
+          </Key>
+          <Property Name="BakeryLogKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonKey" Type="int" />
+          <Property Name="BakeryLogTimeStamp" Type="datetime" />
+        </EntityType>
+        <EntityType Name="BusinessRules">
+          <Key>
+            <PropertyRef Name="BusinessRuleKey" />
+          </Key>
+          <Property Name="BusinessRuleKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RuleName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="RuleDescription" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeKey" />
+          </Key>
+          <Property Name="EmployeeKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonKey" Type="int" />
+          <Property Name="EmployeeTitle" Type="nvarchar" MaxLength="255" />
+          <Property Name="EmployeeStatus" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonKey" />
+          </Key>
+          <Property Name="PersonKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PersonLastName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PersonFirstName" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonEmail" Type="nvarchar" MaxLength="255" />
+          <Property Name="PersonPhone" Type="nchar" MaxLength="11" />
+          <Property Name="PersonDateAdded" Type="datetime" />
+          <Property Name="PersonPassword" Type="varbinary" MaxLength="500" />
+          <Property Name="PersonIdentityCode" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductKey" />
+          </Key>
+          <Property Name="ProductKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ProductPrice" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="SaleKey" />
+          </Key>
+          <Property Name="SaleKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleDate" Type="datetime" />
+          <Property Name="CustomerKey" Type="int" />
+          <Property Name="EmployeeKey" Type="int" />
+        </EntityType>
+        <EntityType Name="SaleDetail">
+          <Key>
+            <PropertyRef Name="SaleDetailKey" />
+          </Key>
+          <Property Name="SaleDetailKey" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleKey" Type="int" />
+          <Property Name="ProductKey" Type="int" />
+          <Property Name="SaleDetailPriceCharged" Type="money" Nullable="false" />
+          <Property Name="SaleDetailQuantity" Type="int" Nullable="false" />
+          <Property Name="SaleDetailDiscount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="SaleDetailSaleTaxPercent" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="SaleDetailEatInTax" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <Association Name="FK__BakeryLog__Perso__48CFD27E">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="BakeryLog" Type="Self.BakeryLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="BakeryLog">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee__Person__49C3F6B7">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sale__CustomerKe__4AB81AF0">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="CustomerKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sale__EmployeeKe__4BAC3F29">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeKey" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="EmployeeKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleDetai__Produ__4CA06362">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="SaleDetail" Type="Self.SaleDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductKey" />
+            </Principal>
+            <Dependent Role="SaleDetail">
+              <PropertyRef Name="ProductKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleDetai__SaleK__4D94879B">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
+          <End Role="SaleDetail" Type="Self.SaleDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="SaleKey" />
+            </Principal>
+            <Dependent Role="SaleDetail">
+              <PropertyRef Name="SaleKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="usp_Login" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="useremail" Type="nvarchar" Mode="In" />
+          <Parameter Name="password" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_newPerson" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="lastName" Type="nvarchar" Mode="In" />
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="email" Type="nvarchar" Mode="In" />
+          <Parameter Name="phone" Type="nchar" Mode="In" />
+          <Parameter Name="Password" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="BakeryModelStoreContainer">
+          <EntitySet Name="BakeryLog" EntityType="Self.BakeryLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BusinessRules" EntityType="Self.BusinessRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SaleDetail" EntityType="Self.SaleDetail" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__BakeryLog__Perso__48CFD27E" Association="Self.FK__BakeryLog__Perso__48CFD27E">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="BakeryLog" EntitySet="BakeryLog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee__Person__49C3F6B7" Association="Self.FK__Employee__Person__49C3F6B7">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sale__CustomerKe__4AB81AF0" Association="Self.FK__Sale__CustomerKe__4AB81AF0">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Sale" EntitySet="Sale" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sale__EmployeeKe__4BAC3F29" Association="Self.FK__Sale__EmployeeKe__4BAC3F29">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Sale" EntitySet="Sale" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleDetai__Produ__4CA06362" Association="Self.FK__SaleDetai__Produ__4CA06362">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="SaleDetail" EntitySet="SaleDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleDetai__SaleK__4D94879B" Association="Self.FK__SaleDetai__SaleK__4D94879B">
+            <End Role="Sale" EntitySet="Sale" />
+            <End Role="SaleDetail" EntitySet="SaleDetail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BakeryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BakeryLog">
+          <Key>
+            <PropertyRef Name="BakeryLogKey" />
+          </Key>
+          <Property Name="BakeryLogKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonKey" Type="Int32" />
+          <Property Name="BakeryLogTimeStamp" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__BakeryLog__Perso__48CFD27E" FromRole="BakeryLog" ToRole="Person" />
+        </EntityType>
+        <EntityType Name="BusinessRule">
+          <Key>
+            <PropertyRef Name="BusinessRuleKey" />
+          </Key>
+          <Property Name="BusinessRuleKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RuleName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RuleDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeKey" />
+          </Key>
+          <Property Name="EmployeeKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonKey" Type="Int32" />
+          <Property Name="EmployeeTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__Employee__Person__49C3F6B7" FromRole="Employee" ToRole="Person" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK__Sale__EmployeeKe__4BAC3F29" FromRole="Employee" ToRole="Sale" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="PersonKey" />
+          </Key>
+          <Property Name="PersonKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PersonLastName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PersonFirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PersonPhone" Type="String" MaxLength="11" FixedLength="true" Unicode="true" />
+          <Property Name="PersonDateAdded" Type="DateTime" Precision="3" />
+          <Property Name="PersonPassword" Type="Binary" MaxLength="500" FixedLength="false" />
+          <Property Name="PersonIdentityCode" Type="Guid" />
+          <NavigationProperty Name="BakeryLogs" Relationship="Self.FK__BakeryLog__Perso__48CFD27E" FromRole="Person" ToRole="BakeryLog" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK__Employee__Person__49C3F6B7" FromRole="Person" ToRole="Employee" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK__Sale__CustomerKe__4AB81AF0" FromRole="Person" ToRole="Sale" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductKey" />
+          </Key>
+          <Property Name="ProductKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="SaleDetails" Relationship="Self.FK__SaleDetai__Produ__4CA06362" FromRole="Product" ToRole="SaleDetail" />
+        </EntityType>
+        <EntityType Name="Sale">
+          <Key>
+            <PropertyRef Name="SaleKey" />
+          </Key>
+          <Property Name="SaleKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleDate" Type="DateTime" Precision="3" />
+          <Property Name="CustomerKey" Type="Int32" />
+          <Property Name="EmployeeKey" Type="Int32" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK__Sale__EmployeeKe__4BAC3F29" FromRole="Sale" ToRole="Employee" />
+          <NavigationProperty Name="Person" Relationship="Self.FK__Sale__CustomerKe__4AB81AF0" FromRole="Sale" ToRole="Person" />
+          <NavigationProperty Name="SaleDetails" Relationship="Self.FK__SaleDetai__SaleK__4D94879B" FromRole="Sale" ToRole="SaleDetail" />
+        </EntityType>
+        <EntityType Name="SaleDetail">
+          <Key>
+            <PropertyRef Name="SaleDetailKey" />
+          </Key>
+          <Property Name="SaleDetailKey" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleKey" Type="Int32" />
+          <Property Name="ProductKey" Type="Int32" />
+          <Property Name="SaleDetailPriceCharged" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="SaleDetailQuantity" Type="Int32" Nullable="false" />
+          <Property Name="SaleDetailDiscount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="SaleDetailSaleTaxPercent" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="SaleDetailEatInTax" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__SaleDetai__Produ__4CA06362" FromRole="SaleDetail" ToRole="Product" />
+          <NavigationProperty Name="Sale" Relationship="Self.FK__SaleDetai__SaleK__4D94879B" FromRole="SaleDetail" ToRole="Sale" />
+        </EntityType>
+        <Association Name="FK__BakeryLog__Perso__48CFD27E">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="BakeryLog" Type="Self.BakeryLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="BakeryLog">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Employee__Person__49C3F6B7">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="PersonKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sale__EmployeeKe__4BAC3F29">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeKey" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="EmployeeKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sale__CustomerKe__4AB81AF0">
+          <End Role="Person" Type="Self.Person" Multiplicity="0..1" />
+          <End Role="Sale" Type="Self.Sale" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="PersonKey" />
+            </Principal>
+            <Dependent Role="Sale">
+              <PropertyRef Name="CustomerKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleDetai__Produ__4CA06362">
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="SaleDetail" Type="Self.SaleDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductKey" />
+            </Principal>
+            <Dependent Role="SaleDetail">
+              <PropertyRef Name="ProductKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__SaleDetai__SaleK__4D94879B">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
+          <End Role="SaleDetail" Type="Self.SaleDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="SaleKey" />
+            </Principal>
+            <Dependent Role="SaleDetail">
+              <PropertyRef Name="SaleKey" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BakeryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BakeryLogs" EntityType="Self.BakeryLog" />
+          <EntitySet Name="BusinessRules" EntityType="Self.BusinessRule" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="Sales" EntityType="Self.Sale" />
+          <EntitySet Name="SaleDetails" EntityType="Self.SaleDetail" />
+          <AssociationSet Name="FK__BakeryLog__Perso__48CFD27E" Association="Self.FK__BakeryLog__Perso__48CFD27E">
+            <End Role="Person" EntitySet="People" />
+            <End Role="BakeryLog" EntitySet="BakeryLogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Employee__Person__49C3F6B7" Association="Self.FK__Employee__Person__49C3F6B7">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sale__EmployeeKe__4BAC3F29" Association="Self.FK__Sale__EmployeeKe__4BAC3F29">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sale__CustomerKe__4AB81AF0" Association="Self.FK__Sale__CustomerKe__4AB81AF0">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Sale" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleDetai__Produ__4CA06362" Association="Self.FK__SaleDetai__Produ__4CA06362">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="SaleDetail" EntitySet="SaleDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__SaleDetai__SaleK__4D94879B" Association="Self.FK__SaleDetai__SaleK__4D94879B">
+            <End Role="Sale" EntitySet="Sales" />
+            <End Role="SaleDetail" EntitySet="SaleDetails" />
+          </AssociationSet>
+          <FunctionImport Name="usp_Login">
+            <Parameter Name="useremail" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_newPerson">
+            <Parameter Name="lastName" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="phone" Mode="In" Type="String" />
+            <Parameter Name="Password" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BakeryModelStoreContainer" CdmEntityContainer="BakeryEntities">
+          <EntitySetMapping Name="BakeryLogs">
+            <EntityTypeMapping TypeName="BakeryModel.BakeryLog">
+              <MappingFragment StoreEntitySet="BakeryLog">
+                <ScalarProperty Name="BakeryLogKey" ColumnName="BakeryLogKey" />
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+                <ScalarProperty Name="BakeryLogTimeStamp" ColumnName="BakeryLogTimeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessRules">
+            <EntityTypeMapping TypeName="BakeryModel.BusinessRule">
+              <MappingFragment StoreEntitySet="BusinessRules">
+                <ScalarProperty Name="BusinessRuleKey" ColumnName="BusinessRuleKey" />
+                <ScalarProperty Name="RuleName" ColumnName="RuleName" />
+                <ScalarProperty Name="RuleDescription" ColumnName="RuleDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="BakeryModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeKey" ColumnName="EmployeeKey" />
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+                <ScalarProperty Name="EmployeeTitle" ColumnName="EmployeeTitle" />
+                <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="BakeryModel.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="PersonKey" ColumnName="PersonKey" />
+                <ScalarProperty Name="PersonLastName" ColumnName="PersonLastName" />
+                <ScalarProperty Name="PersonFirstName" ColumnName="PersonFirstName" />
+                <ScalarProperty Name="PersonEmail" ColumnName="PersonEmail" />
+                <ScalarProperty Name="PersonPhone" ColumnName="PersonPhone" />
+                <ScalarProperty Name="PersonDateAdded" ColumnName="PersonDateAdded" />
+                <ScalarProperty Name="PersonPassword" ColumnName="PersonPassword" />
+                <ScalarProperty Name="PersonIdentityCode" ColumnName="PersonIdentityCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="BakeryModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductKey" ColumnName="ProductKey" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="BakeryModel.Sale">
+              <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="SaleKey" ColumnName="SaleKey" />
+                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="CustomerKey" ColumnName="CustomerKey" />
+                <ScalarProperty Name="EmployeeKey" ColumnName="EmployeeKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SaleDetails">
+            <EntityTypeMapping TypeName="BakeryModel.SaleDetail">
+              <MappingFragment StoreEntitySet="SaleDetail">
+                <ScalarProperty Name="SaleDetailKey" ColumnName="SaleDetailKey" />
+                <ScalarProperty Name="SaleKey" ColumnName="SaleKey" />
+                <ScalarProperty Name="ProductKey" ColumnName="ProductKey" />
+                <ScalarProperty Name="SaleDetailPriceCharged" ColumnName="SaleDetailPriceCharged" />
+                <ScalarProperty Name="SaleDetailQuantity" ColumnName="SaleDetailQuantity" />
+                <ScalarProperty Name="SaleDetailDiscount" ColumnName="SaleDetailDiscount" />
+                <ScalarProperty Name="SaleDetailSaleTaxPercent" ColumnName="SaleDetailSaleTaxPercent" />
+                <ScalarProperty Name="SaleDetailEatInTax" ColumnName="SaleDetailEatInTax" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_Login" FunctionName="BakeryModel.Store.usp_Login" />
+          <FunctionImportMapping FunctionImportName="usp_newPerson" FunctionName="BakeryModel.Store.usp_newPerson" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

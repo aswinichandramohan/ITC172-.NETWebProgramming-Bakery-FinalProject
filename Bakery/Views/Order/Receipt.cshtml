@@ -1,0 +1,56 @@
+﻿@model Bakery.Models.Order
+@{
+    ViewBag.Title = "Receipt";
+}
+
+<h2>Receipt</h2>
+<!--The Table below is made by looping through the Items list
+    contained in the Order object-->
+
+<table class="table">
+    <tr>
+        <th>ProductID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Discount</th>
+    </tr>
+    @foreach (var item in Model.GetItems())
+    {
+        <tr>
+            <td>@Html.DisplayFor(model => item.ProductKey)</td>
+            <td>@Html.DisplayFor(model => item.ProductName)</td>
+            <td>@Html.DisplayFor(model => item.Price)</td>
+            <td> @Html.DisplayFor(model => item.Quantity)</td>
+            <td>@Html.DisplayFor(model => item.Discount)</td>
+
+        </tr>
+
+    }
+</table>
+
+<!--This second table gives the subtotals and totals from the order class-->
+<table class="table">
+    <tr>
+        <td>Subtotal</td>
+        <td>@Html.DisplayFor(model => model.SubTotal)</td>
+    </tr>
+    <tr>
+        <td>Discounts</td>
+        <td>@Html.DisplayFor(model => model.Discount)</td>
+    </tr>
+    <tr>
+        <td>SubTotal After Discount</td>
+        <td>@Html.DisplayFor(model => model.SubTotalAfterDiscount)</td>
+    </tr>
+
+    <tr>
+        <td>Tax</td>
+        <td>@Html.DisplayFor(model => model.Tax)</td>
+    </tr>
+    <tr>
+        <td>Total</td>
+        <td>@Html.DisplayFor(model => model.Total)</td>
+    </tr>
+</table>
+
